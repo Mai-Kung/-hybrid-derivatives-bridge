@@ -22,6 +22,19 @@ RAW_COLUMNS = {
 
 MAJORS = {"BTCUSDT.P", "ETHUSDT.P"}
 
+# The Hybrid AI Trading Process's own Majors Whitelist (skill v7.0 §2A) -- broader than the
+# BTC/ETH-only exclusion the original Rule F backtest used. Re-testing against this is one of
+# the §6F prerequisites.
+FULL_MAJORS_WHITELIST = {
+    f"{sym}USDT.P" for sym in
+    "BTC ETH BNB SOL BCH LTC XMR ZEC AAVE TAO YFI QNT HYPE MKR COMP EGLD DASH XRP ADA AVAX LINK DOT".split()
+}
+
+DB_RED = {
+    f"{sym}USDT.P" for sym in
+    "BEAT DRIFT ESPORTS LAB RESOLV SIREN VELVET BLESS TRADOOR PORTAL".split()
+}
+
 SIGNAL_COLS = ["chg_5m", "chg_15m", "chg_30m", "chg_open_1d", "chg_24h", "chg_1w", "chg_1m"]
 
 
@@ -40,21 +53,35 @@ def _read_one(path: str) -> pd.DataFrame:
     return df
 
 
-def load_altcoin_universe(paths: list[str], min_volume_usd: float = 1_000_000) -> pd.DataFrame:
+def load_altcoin_universe(
+    paths: list[str], min_volume_usd: float = 1_000_000, majors: set[str] | None = None
+) -> pd.DataFrame:
     """Combine the exports, keep alt perpetuals only, dedupe, and sort.
 
-    Excludes BTCUSDT.P / ETHUSDT.P (majors, not "altcoins") and any symbol
-    below `min_volume_usd` 24h volume (illiquid names -> unreliable fills).
+    `majors` defaults to BTC/ETH only (the original Rule F backtest universe); pass
+    `FULL_MAJORS_WHITELIST` to match this process's own §2A exclusion list instead.
+    Also drops any symbol below `min_volume_usd` 24h volume (illiquid -> unreliable fills).
     """
+    majors = MAJORS if majors is None else majors
     frames = [_read_one(p) for p in paths]
     df = pd.concat(frames, ignore_index=True)
 
-    df = df[df["Symbol"].str.endswith("USDT.P") & ~df["Symbol"].isin(MAJORS)].copy()
+    df = df[df["Symbol"].str.endswith("USDT.P") & ~df["Symbol"].isin(majors)].copy()
     df = df.drop_duplicates(subset=["Symbol", "datetime"])
     df = df.dropna(subset=["datetime", "price"])
     df = df[df["volume_24h"] >= min_volume_usd]
 
     df = df.sort_values(["Symbol", "datetime"]).reset_index(drop=True)
+
+    df["magnitude"] = df[["chg_open_1d", "chg_24h"]].abs().max(axis=1)
+
+    # Session-wide LTF triple-duplication rate (STEP 0 data-integrity gate): fraction of rows
+    # in each scan where 5m/15m/30m are all exactly identical -- a TradingView export artifact,
+    # not real triple-timeframe confirmation. >=70% -> DEGRADED-CONFIRM for that whole scan.
+    dup = (df["chg_5m"] == df["chg_15m"]) & (df["chg_15m"] == df["chg_30m"])
+    dup_rate = dup.groupby(df["datetime"]).transform("mean")
+    df["ltf_dup_rate"] = dup_rate
+    df["degraded_confirm"] = dup_rate >= 0.70
 
     # Forward return to the symbol's *next* snapshot, plus the hours until it,
     # so the engine can drop stale/too-far-apart pairs (delistings, data gaps).
