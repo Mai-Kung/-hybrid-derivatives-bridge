@@ -1,10 +1,13 @@
 # Chart-pattern playbook: MARSCOIN (sustained) vs T (faded) — discretionary confluence overlay
 
-**Status: proposal, not backtested, not part of any live rule. n=2 chart examples — treat this
-exactly as cautiously as this whole document treats a 1-2 case backtest anywhere else.**
+**Status: proposal, not backtested, not part of any live rule. n=2 symbols (MARSCOIN, T), 4
+individual signal instances examined in detail on T alone — still an illustration, not a
+statistic. Treat this exactly as cautiously as this whole document treats a 1-2 case backtest
+anywhere else.**
 
-Source: two TradingView chart sets the trader shared (MARSCOIN/USDT.P and T/USDT.P, multiple
-timeframes each), each showing a Buy→ride→Sell cycle picked out by an on-chart signal tool, with
+Source: TradingView chart sets the trader shared (MARSCOIN/USDT.P and T/USDT.P, multiple
+timeframes each, including one closer 15m look at T's full cycle), each showing a Buy→ride→Sell
+cycle picked out by an on-chart signal tool, with
 five sub-panel indicators visible: a rising step-line trailing stop under price, a bounded
 momentum oscillator (~0-60 scale, dotted reference line), a paired moving-average cross line
 (colored dot at each cross), a histogram (MACD/AO-style), and a bottom "trend-strength" stacked
@@ -31,7 +34,9 @@ SELL/exhaustion confluence (both charts show this before price gives back gains)
 ```
 
 Both trades were built on the same five-point entry and five-point exit logic. That part isn't
-the interesting difference.
+the interesting difference — see the closer look at T below for the part that is: the same
+five points can fire on both a real signal and a false one, and the trend-strength gauge's
+*slope* is what tells them apart.
 
 ## What's different: the move MARSCOIN was riding vs the move T was riding
 
@@ -51,6 +56,45 @@ visible second leg, no news catalyst implied, nothing to re-buy. This is what an
 momentum swing without a fresh catalyst looks like: the same five-point entry works, but the
 exit needs to be respected the first time the exhaustion confluence appears, because there's no
 underlying reason to expect a second wave.
+
+## A closer look at T (15m, full cycle): a false signal and a risky re-entry
+
+A more detailed T/USDT.P chart (15m, showing the whole cycle from before the rally to the
+current dip) adds two more cases beyond the clean win/fade comparison above — both are about
+**telling a good signal from a weak one using the same five indicators, not adding new ones.**
+
+**Case 3 — the premature Sell that the rally overran.** Before the real rally, a "Sell" fires
+while the oscillator is already down near its lower band (roughly -53) and the bottom
+trend-strength gauge is still flat near zero. Price does not fall — it reverses almost
+immediately into the big rally. **This is what a false signal looks like on this exact setup:
+a Sell (or Buy) that fires while the trend-strength gauge has not yet turned is low-conviction,
+even if the oscillator/MA-cross conditions technically align.** The winning Buy that follows
+shortly after fires as the trend-strength gauge is visibly *lifting off zero* — that's the
+tell that distinguishes it from the false Sell just before it.
+
+**Case 4 — the late re-Buy while the trend gauge is still falling.** After the peak, price gives
+back the whole rally and chops sideways, and a new "Buy" appears on the right edge as the
+oscillator dips oversold again (~-40 to -53) — but the trend-strength gauge is still on its way
+down (from a prior peak near 19 to about 11.7 at the Buy), not yet turned up. This is
+structurally a **different, weaker kind of Buy** than the one that caught the original rally
+(which fired as the gauge was rising from near zero): it's a bounce attempt inside a still-
+weakening trend, not a fresh trend igniting. Both may satisfy the same 5-point BUY confluence
+checklist — the oscillator and MA-cross can technically flip on a dead-cat bounce too — which is
+exactly why the checklist alone is not sufficient without also reading the gauge's *slope*.
+
+**The refinement this adds to the checklist:** grade every Buy/Sell signal by whether the
+bottom trend-strength gauge is rising or falling at the moment the signal fires, not only by
+whether price crossed it:
+
+```
+HIGH-CONVICTION signal: the trend-strength gauge is turning UP from a low base (or turning DOWN
+  from a high base, for a Sell/short) at the same time the 5-point confluence fires. This is
+  what preceded T's real rally and MARSCOIN's whole move.
+LOW-CONVICTION signal: the trend-strength gauge is still moving in the OPPOSITE direction from
+  the signal (falling on a Buy, rising on a Sell) when the confluence fires. This is what
+  preceded T's premature early Sell and its risky late re-Buy. Treat these as smaller size, a
+  tighter invalidation, or skip -- not equal-weight with a high-conviction signal.
+```
 
 ## The strategy this implies
 
@@ -85,9 +129,10 @@ exhaustion-based early exit is aimed directly at that gap.
 
 ## What this is NOT, stated as plainly as everything else in this document
 
-- **n = 2.** One sustained (MARSCOIN) and one single-leg (T) example is not a sample size,
-  it's an illustration. Every number in the "what's different" section above is a description
-  of two charts, not a statistic.
+- **n = 2 symbols, 4 signal instances on one of them.** One sustained move (MARSCOIN), one
+  single-leg fade with a false early signal and a weak late re-entry (T) is not a sample size,
+  it's an illustration. Every observation above, including the gauge-slope grading, is a
+  description of a handful of charts, not a statistic.
 - **Not backtested against the screener data this process otherwise uses.** The indicators
   shown (step-line, oscillator, MA-cross, histogram, trend-strength gauge) aren't in the
   `Mai_BI_*` CSV/XLSX exports at all — they're TradingView chart indicators computed from OHLCV
