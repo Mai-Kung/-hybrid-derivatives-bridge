@@ -92,6 +92,28 @@ From the full grid search (`results/grid_search_july.csv`,
   this looks like one real, repeatable effect rather than several
   independent edges.
 
+## Trade-by-trade entry/exit log
+
+`results/trade_log.xlsx` lists every fill: entry time, exit time, symbol,
+30-minute signal value at entry, entry price, exit price, gross return, cost,
+and net return — 4,010 short trades across the 401 rebalance periods.
+
+- **Trade Log** — one row per fill.
+- **Period Summary** — one row per rebalance: entry/exit time, the 10 trades'
+  average return, and a compounding equity curve with an embedded chart, all
+  computed with live formulas that reference the Trade Log rows directly.
+- **Summary** — strategy definition and headline stats (total return, win
+  rate, max drawdown, Sharpe), also live formulas off Period Summary.
+
+All formulas were checked by reproducing them independently in pandas
+(`results/trade_log.csv` → groupby/cumprod) — total return, win rate, and
+max drawdown match the numbers above exactly. This sandbox's LibreOffice
+could not run headlessly to pre-bake cached values (it hung on even a
+trivial file), so the formulas compute on open instead of shipping
+pre-calculated — normal in Excel/LibreOffice Desktop (default calculation
+mode is Automatic). If a viewer ever shows blank formula cells, force a
+recalc (Excel: Ctrl+Alt+F9).
+
 ## Caveats — read before trading this
 
 1. **Funding rate is not modeled.** The data has no funding-rate column.

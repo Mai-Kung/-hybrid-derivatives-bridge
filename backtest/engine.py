@@ -49,6 +49,48 @@ def _period_returns(df: pd.DataFrame, cfg: StrategyConfig) -> pd.Series:
     return out.dropna()
 
 
+def get_trades(df: pd.DataFrame, cfg: StrategyConfig) -> pd.DataFrame:
+    """Per-name trade log for the strategy: one row per symbol taken in each period.
+
+    Mirrors `_period_returns` exactly (same universe filter, same N, same
+    long/short assignment) but returns the individual entry/exit rows instead
+    of the period-average return, so a real fill-by-fill record can be built.
+    """
+    valid = df[(df["gap_hours"] <= MAX_GAP_HOURS) & df[cfg.signal].notna() & df["fwd_ret"].notna()]
+    cost = cfg.cost_bps_per_leg / 10_000.0
+
+    trade_frames = []
+
+    def per_period(g: pd.DataFrame) -> None:
+        if len(g) < 2 * cfg.n:
+            return
+        entry_time = g.name
+        ranked = g.sort_values(cfg.signal)
+        losers, winners = ranked.iloc[: cfg.n], ranked.iloc[-cfg.n :]
+        long_leg, short_leg = (winners, losers) if cfg.direction == "momentum" else (losers, winners)
+
+        legs = []
+        if cfg.side in ("long_only", "long_short"):
+            legs.append(long_leg.assign(side="long", gross_ret=long_leg["fwd_ret"], datetime=entry_time))
+        if cfg.side in ("short_only", "long_short"):
+            legs.append(short_leg.assign(side="short", gross_ret=-short_leg["fwd_ret"], datetime=entry_time))
+        if legs:
+            trade_frames.append(pd.concat(legs))
+
+    valid.groupby("datetime", sort=True).apply(per_period, include_groups=False)
+
+    trades = pd.concat(trade_frames, ignore_index=True)
+    trades["net_ret"] = trades["gross_ret"] - cost
+    trades = trades.rename(columns={"datetime": "entry_time", "next_dt": "exit_time",
+                                     "price": "entry_price", "next_price": "exit_price",
+                                     "Symbol": "symbol"})
+    cols = ["entry_time", "exit_time", "symbol", "side", cfg.signal, "entry_price", "exit_price",
+            "gross_ret", "net_ret"]
+    trades = trades[cols].rename(columns={cfg.signal: "signal_value"})
+    trades["signal_name"] = cfg.signal
+    return trades.sort_values(["entry_time", "side"]).reset_index(drop=True)
+
+
 def metrics_from_returns(returns: pd.Series, periods_per_year: float) -> dict:
     if len(returns) == 0:
         return {"n_periods": 0}
