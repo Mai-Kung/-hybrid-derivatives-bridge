@@ -1,9 +1,9 @@
-# Chart-pattern playbook: MARSCOIN (sustained), T (slow fade), 4USDT.P (fast crash)
+# Chart-pattern playbook: MARSCOIN (sustained), T (slow fade), 4USDT.P (fast crash), ZECUSDT.P (multi-leg continuation)
 
-**Status: proposal, not backtested, not part of any live rule. n=3 symbols (MARSCOIN, T,
-4USDT.P), several individual signal instances examined in detail across them — still an
-illustration, not a statistic. Treat this exactly as cautiously as this whole document treats a
-1-2 case backtest anywhere else.**
+**Status: proposal, not backtested, not part of any live rule. n=4 symbols (MARSCOIN, T,
+4USDT.P, ZECUSDT.P), several individual signal instances examined in detail across them — still
+an illustration, not a statistic. Treat this exactly as cautiously as this whole document treats
+a 1-2 case backtest anywhere else.**
 
 Source: TradingView chart sets the trader shared (MARSCOIN/USDT.P and T/USDT.P, multiple
 timeframes each, including one closer 15m look at T's full cycle), each showing a Buy→ride→Sell
@@ -133,6 +133,36 @@ throw a low-conviction one. Whether that's because not enough time had passed or
 downtrend was simply too strong to satisfy the BUY confluence yet isn't something one chart can
 answer — logged as an open question, not a conclusion.
 
+## A fourth symbol: ZECUSDT.P — sustained continuation on an established coin, no listing catalyst
+
+A fourth chart set (ZEC/USDT.P, +14.4% on the day, 1h/30m/15m) is the cleanest single-symbol
+illustration of the *whole* lifecycle in one place: a Buy trigger, three distinct legs up while
+holding through two real pullbacks, and finally a Sell trigger exactly as the trend-strength
+gauge breaks a long plateau — all on Zcash, an old, established coin with no fresh-listing
+catalyst behind the move at all.
+
+- After the Buy, price made three separate step-ups (visible as three plateaus in the rising
+  step-line), each preceded by a genuine pullback where the oscillator and histogram both
+  dipped hard — not just chopped sideways — before the next leg started.
+- Through all three legs, the trend-strength gauge climbed fast to near its ceiling (~19.6-20)
+  and **stayed there** across both pullbacks — it did not roll over during either interim dip,
+  which is exactly why neither pullback should have been read as a full exit signal even though
+  the oscillator/histogram briefly went negative each time.
+- Only on the most recent candle, after the third leg, does the gauge finally start rolling over
+  from that long plateau (30m: ~19.6 down to ~14.96; 15m: ~20 down to ~7.65) at the same moment a
+  Sell fires — the textbook Setup B exhaustion trigger, arriving only after the plateau breaks,
+  not during any of the earlier dips.
+
+**What this adds:** MARSCOIN's "let it run" case had a verified news catalyst; this one doesn't,
+and it still produced a genuine multi-leg continuation. **The gauge's persistence at or near its
+ceiling through repeated pullbacks is itself evidence worth trusting, independent of whether a
+formal catalyst exists** — catalyst verification (Rule N's N1) is one way to gain confidence a
+pullback isn't the top in advance, but watching the gauge fail to roll over through two or more
+genuine dips is a technical way to earn that same confidence in real time, on any symbol. This
+refines Setup A's catalyst modifier: treat "gauge holds its plateau through a real pullback" as
+an additional, catalyst-independent reason to trail rather than exit, not only a confirmed news
+event.
+
 ## The strategy this implies
 
 **The entry and exit confluence checklists above are the same regardless of context.** What
@@ -166,11 +196,12 @@ exhaustion-based early exit is aimed directly at that gap.
 
 ## What this is NOT, stated as plainly as everything else in this document
 
-- **n = 3 symbols.** One sustained move (MARSCOIN), one slow single-leg fade with a false early
+- **n = 4 symbols.** One sustained move (MARSCOIN), one slow single-leg fade with a false early
   signal and a weak late re-entry (T), one fast liquidation-style crash with the same exhaustion
-  shape and a matching false early signal (4USDT.P) is not a sample size, it's a slightly
-  broader illustration. Every observation above, including the gauge-slope grading, is a
-  description of a handful of charts, not a statistic.
+  shape and a matching false early signal (4USDT.P), one sustained multi-leg continuation on an
+  established coin with no listing catalyst at all (ZECUSDT.P) is not a sample size, it's a
+  slightly broader illustration. Every observation above, including the gauge-slope grading and
+  the gauge-plateau-persistence read, is a description of a handful of charts, not a statistic.
 - **Not backtested against the screener data this process otherwise uses.** The indicators
   shown (step-line, oscillator, MA-cross, histogram, trend-strength gauge) aren't in the
   `Mai_BI_*` CSV/XLSX exports at all — they're TradingView chart indicators computed from OHLCV

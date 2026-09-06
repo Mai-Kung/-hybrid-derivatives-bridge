@@ -126,6 +126,15 @@ reason to expect a second leg, and a fresh listing's volatility (thin liquidity,
 record) is itself a reason to demand the pullback/retest structure in Step 1 before entering at
 all, catalyst or not.
 
+A verified catalyst is not the only way to earn that same trail-not-exit confidence, though: if
+the trend-strength gauge climbs to (near) its ceiling and then **stays there through a real
+pullback** — the oscillator/histogram genuinely dip, not just chop sideways, but the gauge itself
+doesn't roll over — that persistence is catalyst-independent evidence the move isn't done, even
+on an old, established coin with no fresh-listing story at all (ZECUSDT.P). Treat "gauge holds
+its plateau through a real pullback" as an additional reason to trail rather than exit at the
+next exhaustion confluence, alongside a confirmed catalyst, not only in place of checking for
+one.
+
 ## Setup B — Distribution Fade Short
 
 A reversal after a **completed** pump, not a short "because a coin is up too much." Wait for the
@@ -276,9 +285,21 @@ correctly staying quiet (a "no trade" state) rather than manufacturing a buy on 
 reading during a still-declining gauge — the same discipline Step 4 asks for, observed working
 in practice.
 
+**ZECUSDT.P (Setup A, no catalyst at all — the "gauge plateau" case).** An established coin
+(Zcash, no fresh-listing story) made three separate step-ups after the Buy trigger, each
+preceded by a genuine pullback where the oscillator/histogram dipped hard. Through all three
+legs the gauge climbed fast to near its ceiling (~19.6-20) and **stayed there across both
+pullbacks** — it never rolled over during either interim dip, which is exactly why neither
+pullback should have been read as a full exit. Only after the third leg does the gauge finally
+break its plateau (30m and 15m both roll over hard) at the same moment a Sell fires — the
+textbook Setup B exhaustion trigger, arriving only once the plateau actually breaks. This is the
+case behind Setup A's gauge-plateau-persistence modifier above: MARSCOIN's "let it run" case had
+a verified catalyst, this one didn't, and the gauge's refusal to roll over through real
+pullbacks was itself enough reason to keep holding.
+
 ## What this is NOT — say this every time, not just once
 
-- **Not a statistic.** Built from three symbols and a handful of signal instances across them,
+- **Not a statistic.** Built from four symbols and a handful of signal instances across them,
   read independently twice (once per analysis, then merged). Every rule above is a description
   of specific charts plus general multi-timeframe trading principles, not a backtested win rate.
 - **Not verified against systematic backtest data.** These indicators are computed from OHLCV
