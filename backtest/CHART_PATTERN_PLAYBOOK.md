@@ -1,9 +1,9 @@
-# Chart-pattern playbook: MARSCOIN (sustained) vs T (faded) — discretionary confluence overlay
+# Chart-pattern playbook: MARSCOIN (sustained), T (slow fade), 4USDT.P (fast crash)
 
-**Status: proposal, not backtested, not part of any live rule. n=2 symbols (MARSCOIN, T), 4
-individual signal instances examined in detail on T alone — still an illustration, not a
-statistic. Treat this exactly as cautiously as this whole document treats a 1-2 case backtest
-anywhere else.**
+**Status: proposal, not backtested, not part of any live rule. n=3 symbols (MARSCOIN, T,
+4USDT.P), several individual signal instances examined in detail across them — still an
+illustration, not a statistic. Treat this exactly as cautiously as this whole document treats a
+1-2 case backtest anywhere else.**
 
 Source: TradingView chart sets the trader shared (MARSCOIN/USDT.P and T/USDT.P, multiple
 timeframes each, including one closer 15m look at T's full cycle), each showing a Buy→ride→Sell
@@ -96,6 +96,43 @@ LOW-CONVICTION signal: the trend-strength gauge is still moving in the OPPOSITE 
   tighter invalidation, or skip -- not equal-weight with a high-conviction signal.
 ```
 
+## A third symbol: "4USDT.P" — the same Setup-B exit, but a fast liquidation-style crash
+
+A third chart set (4/USDT.P, 1h/30m/15m) shows a different *speed* of the same distribution
+pattern: price had been in a rising staircase (green step-line), then a Sell fires and price
+craters **-27.7% in a very short window** — visually a single sharp leg, not T's slower
+multi-candle fade. This looks like a leveraged liquidation cascade rather than an ordinary
+momentum swing, and it's a cleaner, more dramatic version of the same exhaustion confluence:
+
+- The trend-strength gauge was sitting at a **plateau near its top** (around 20) exactly at the
+  Sell trigger, and rolled over sharply right after — the gauge peaking *at* the signal, rather
+  than having visibly turned down beforehand, is still a valid high-conviction read: a flat top
+  about to break is the leading edge of "turning down," not a reason to wait for confirmation
+  that arrives after the move.
+- The oscillator went from near its upper band (~60) to deeply negative (readings around
+  -20 to -47 across the three timeframes) within the same short window — a much sharper
+  rollover than T's, matching how much faster the price move was.
+- The MA-cross line flipped bearish essentially at the Sell, then diverged hard and fast — no
+  slow compression first, unlike a normal topping process.
+- **No dip-buy signal has fired on the way down** (as of the last visible candle on any
+  timeframe). This is worth noting on its own: the same signal system that produced T's
+  premature early Sell and weak late re-Buy did *not* manufacture a buy signal here just because
+  price fell a lot — it stayed quiet while the trend-strength gauge was still clearly declining,
+  which is the correct "no trade" state, not a flaw.
+- The 15m chart also shows an early Sell right before the original rally's Buy trigger — the
+  same "false signal right before the real one" shape already seen on T, now observed on a
+  **second, independent symbol**. That doesn't make it a proven pattern, but it's one more data
+  point in the same direction rather than a one-off coincidence on T alone.
+
+**What this adds to Setup B (distribution fade short):** the checklist works whether the
+distribution plays out over many candles (T) or nearly all at once (4USDT.P) — the same five
+conditions and the same gauge-plateau/rollover read applied to both. It also reinforces the
+"don't manufacture a buy on every oversold reading during a still-declining gauge" caution: this
+system correctly produced *no* signal on the way down here, where T's version did eventually
+throw a low-conviction one. Whether that's because not enough time had passed or because the
+downtrend was simply too strong to satisfy the BUY confluence yet isn't something one chart can
+answer — logged as an open question, not a conclusion.
+
 ## The strategy this implies
 
 **The entry and exit confluence checklists above are the same regardless of context.** What
@@ -129,9 +166,10 @@ exhaustion-based early exit is aimed directly at that gap.
 
 ## What this is NOT, stated as plainly as everything else in this document
 
-- **n = 2 symbols, 4 signal instances on one of them.** One sustained move (MARSCOIN), one
-  single-leg fade with a false early signal and a weak late re-entry (T) is not a sample size,
-  it's an illustration. Every observation above, including the gauge-slope grading, is a
+- **n = 3 symbols.** One sustained move (MARSCOIN), one slow single-leg fade with a false early
+  signal and a weak late re-entry (T), one fast liquidation-style crash with the same exhaustion
+  shape and a matching false early signal (4USDT.P) is not a sample size, it's a slightly
+  broader illustration. Every observation above, including the gauge-slope grading, is a
   description of a handful of charts, not a statistic.
 - **Not backtested against the screener data this process otherwise uses.** The indicators
   shown (step-line, oscillator, MA-cross, histogram, trend-strength gauge) aren't in the

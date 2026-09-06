@@ -263,11 +263,24 @@ the oscillator went oversold again, satisfying Steps 1-2's boxes — but the tre
 was still declining from its prior peak, not yet turned up. Lower conviction, smaller size or
 skip, per Step 4 — a bounce attempt inside a still-weakening trend, not a fresh trend igniting.
 
+**4USDT.P (Setup B, a fast liquidation-style crash — the same exit, higher speed).** A third
+symbol shows the same distribution exhaustion pattern playing out almost all at once instead of
+over many candles: price dropped ~28% in a short window right after the Sell trigger. The
+trend-strength gauge was sitting at a plateau near its top exactly at the trigger and rolled
+over sharply right after — a flat top about to break still counts as "turning down" for Step 4,
+don't wait for confirmation that only arrives after the move. Two more things worth noting: (1)
+this chart shows the same "false Sell right before the real rally's Buy" shape already seen on
+T, now on a second, independent symbol — one more data point in the same direction, still not a
+proven pattern; (2) no dip-buy signal fired anywhere on the way down, which is the system
+correctly staying quiet (a "no trade" state) rather than manufacturing a buy on every oversold
+reading during a still-declining gauge — the same discipline Step 4 asks for, observed working
+in practice.
+
 ## What this is NOT — say this every time, not just once
 
-- **Not a statistic.** Built from two symbols and a handful of signal instances on one of them,
-  read independently twice. Every rule above is a description of specific charts plus general
-  multi-timeframe trading principles, not a backtested win rate.
+- **Not a statistic.** Built from three symbols and a handful of signal instances across them,
+  read independently twice (once per analysis, then merged). Every rule above is a description
+  of specific charts plus general multi-timeframe trading principles, not a backtested win rate.
 - **Not verified against systematic backtest data.** These indicators are computed from OHLCV
   candle data on a charting platform — a different data source from any CSV/XLSX screener
   export a systematic strategy elsewhere might be tested against. This playbook has not been
