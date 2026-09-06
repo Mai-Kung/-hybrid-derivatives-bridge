@@ -14,7 +14,7 @@ description: >
   them — a discretionary framework, not a backtested strategy; say so plainly every use.
 ---
 
-# Momentum-Confluence Playbook (multi-timeframe, v2)
+# Momentum-Confluence Playbook (multi-timeframe, v3)
 
 **Role:** Professional crypto trader reading a specific multi-timeframe, multi-panel chart setup
 for entry/exit quality — not a general TA tutor, not a backtested system.
@@ -23,14 +23,18 @@ for entry/exit quality — not a general TA tutor, not a backtested system.
 a slower timeframe disagrees is not a reason — it's the textbook no-trade state (Step 3), not
 something to avoid by averaging in.
 
-**Core principle:** *fast timeframe gives timing; slow timeframe gives permission.* Don't take a
-fast-timeframe buy against bearish structure one timeframe up. Don't short a fresh spike while
-the slower timeframes are still accelerating in the other direction.
+**Core principle:** *fast timeframe gives timing; slow timeframe gives permission; the slowest
+agreeing timeframe decides whether a fast-timeframe Sell is a trim, a full exit, or a short
+candidate — never let a 15m or 5m signal by itself override what 1h/30m already established.*
+Don't take a fast-timeframe buy against bearish structure one timeframe up. Don't short a fresh
+spike while the slower timeframes are still accelerating in the other direction.
 
-This version merges two independent readings of the same MARSCOIN/T chart set — one built
-around five indicator panels and a conviction grade, one built around top-down timeframe
-permission and concrete risk rules — because they agreed on the underlying pattern and were
-strong in complementary places.
+This version merges three independent readings of the same MARSCOIN/T/4USDT/ZEC chart set: one
+built around five indicator panels and a conviction grade, one built around top-down timeframe
+permission and concrete risk rules, and a third revision of that same top-down reading that adds
+an explicit signal-priority hierarchy and a stricter no-same-bar-reversal discipline. They agree
+on the underlying pattern and are strong in complementary places, so this revision keeps all
+three sets of teeth rather than picking one.
 
 ## Before doing anything: say what this is
 
@@ -74,9 +78,39 @@ Look at these on **three timeframes**, each with a different job:
 | 1h state | 30m state | 5m/15m state | Action |
 |---|---|---|---|
 | Above step-line, histogram/gauge ≥0 and not declining | Higher low, histogram turning green/up | Pullback ends, fast line crosses up | **Setup A: continuation long** |
+| Above step-line, price still holds above it | Support holds but local momentum rolls over | 15m Sell / bearish cross | **Trim 25-50% of an existing long, tighten the stop** — do NOT flip short (see hierarchy below) |
 | Step-line flat, volume fading | Histogram rolling over | Mixed / repeated crosses | No new trade — manage existing position only |
 | Below step-line or broken support | Histogram <0, lower high | Rebound fails, breaks retest low | **Setup B: distribution fade short** |
+| Broken step-line/support | Negative, but 15m is starting to turn up | Post-drop bullish cross / oversold bounce | **Close the long, stay flat** — a bounce here is not a re-entry and not yet a failed-retest short |
 | 1h and 30m disagree | — | Any signal | **No trade** — a fast-timeframe signal against slower-timeframe context is noise, not an entry |
+
+## Signal priority: which timeframe wins when they conflict
+
+Not every disagreement is the flat "no trade" of Step 3 below — some are ordinary, expected
+situations (a fast-timeframe exhaustion inside a still-healthy slow trend) where the slower
+timeframe should win the argument outright rather than the two just cancelling out. Apply this
+precedence on a **closed bar/snapshot**, not mid-candle:
+
+```
+1. 1h regime   : decides the allowed direction and whether a position may be held at all.
+2. 30m structure: decides add / reduce / full-exit confirmation.
+3. 15m         : decides trigger timing and profit-protection; on its own it can NEVER reverse
+                 a 1h trend that 30m still supports -- at most it earns a trim.
+4. 5m          : execution timing only. It cannot override any of the three above.
+```
+
+| Event | Required action |
+|---|---|
+| 15m Sell fires while 1h is above rising support and 30m support still holds | Take 25-50% profit or tighten the stop. **Do not flip short** — the 1h/30m trend hasn't broken. |
+| 30m support breaks but 1h still closes above its own support | Do not add to the position. Reduce the long and wait for the next 1h close before deciding more. |
+| 1h support breaks **and** 30m is negative / making a lower high | Close the remaining long on the next executable price — this is the one case a 15m signal alone was never enough to justify by itself, but 1h+30m together now are. |
+| After a full failed-pump exit, 15m turns back up | Stay flat. A 15m bounce right after a 1h/30m breakdown is not a long re-entry, and it is not yet a short setup either — that needs its own failed-retest confirmation (Setup B). |
+
+This is what separates ZEC's "hold through the 15m Sell" case from 4USDT's "close the long"
+case: in both, a fast-timeframe signal fired against price still technically extended, but in
+ZEC 1h/30m support never actually broke (trim, don't exit), while in 4USDT 1h support broke with
+30m confirming (close in full) — the same 15m Sell event, two different correct actions,
+determined entirely by what the two slower timeframes were doing at the same moment.
 
 ## Setup A — Continuation Long
 
@@ -113,8 +147,13 @@ Entry : close of the trigger candle, or its retest. Never chase a candle already
 Stop  : below the 30m higher low, or 1.0×ATR(30m), whichever is FARTHER (wider) from entry.
 Target: take 50% at +1.5R; move remainder's stop to entry (breakeven) once that partial fills.
         Trail the remainder below the 15m higher lows / the rising step-line.
-Exit  : immediately, in full, if 15m AND 30m both close back below their momentum-zero/baseline
-        state -- don't wait for the trailing stop to be tagged.
+Trim  : if only 15m rolls over (Sell/bearish cross) while 1h stays above its step-line and 30m
+        support still holds, that is a TRIM signal, not a full exit -- take another 25-50% (if
+        the +1.5R partial hasn't already covered it) and tighten the stop under 30m support.
+        Never turn this into a short; the 1h/30m trend hasn't broken (see Signal Priority above).
+Exit  : immediately, in full, if 1h closes back below its step-line/support AND 30m confirms
+        with negative or lower-high momentum -- don't wait for the trailing stop to be tagged,
+        and don't wait for a 15m signal alone, which is not sufficient for a full exit by itself.
 ```
 
 **Catalyst modifier (from the single-chart reading of this playbook):** if a real, verified
@@ -161,6 +200,13 @@ failed retest.
   false-early-signal case: a Sell fired while the oscillator was already at its lower band, but
   the gauge was still flat, not yet turning down, and the very next move was the rally, not a
   breakdown. The gauge hadn't turned; the sell shouldn't have been trusted.
+- 15m momentum/histogram is already rising from a trough right after the 1h breakdown — this is
+  the post-drop bounce state in Step 2's chart-state map (4USDT's pattern). Wait for that bounce
+  to actually fail before treating it as a failed retest; a rising 15m here is a reason to stay
+  flat, not to short into it.
+- Price already sits more than 8% below the latest 30m swing high with no fresh lower high having
+  just formed — the failed-retest entry has likely already passed, and shorting here is a late
+  chase into an extended move, not an entry at the moment of confirmation.
 
 **Entry, stop, targets:**
 ```
@@ -214,6 +260,10 @@ Timing filters   : no entries within a large scheduled macro event; no entries o
                    catalyst modifier); it does not excuse skipping the entry structure.
 Stop discipline  : if price gaps through the stop, record the actual first executable price.
                    Never backtest or journal a fictional perfect fill.
+No same-bar      : a long exit triggered by a 1h/30m breakdown cannot become a short on that same
+  reversal          signal. Setup B has its own separate required conditions (pump completion,
+                   failed retest) -- closing a long is never itself a reason to open the opposite
+                   position; that decision is made fresh, from Setup B's own checklist.
 Session circuit  : stop trading this playbook for the session after two consecutive full-R
                    losses. That's a signal to stop, not a reason to average in or revenge-size
                    the next one.
@@ -225,10 +275,12 @@ Session circuit  : stop trading this playbook for the session after two consecut
 ```
 1. Is the 1h chart giving permission in the same direction as the trade?
 2. Does the 30m chart show real structure (higher low / lower high), not just a colored cross?
-3. Is the 5m/15m signal a trigger after a pullback/retest, or a late chase?
-4. Is volume supporting the trigger?
-5. Is the stop beyond genuine invalidation, and is the target at least 1.5R away?
-6. Have you stated the catalyst status (confirmed / not) out loud, even though it's not a
+3. Is this action a TRIM, a FULL_EXIT, or a genuine FAILED_RETEST_SHORT — label exactly one,
+   per the Signal Priority table above, before acting?
+4. Is the 5m/15m signal a trigger after a pullback/retest, or a late chase?
+5. Is volume supporting the trigger?
+6. Is the stop beyond genuine invalidation, and is the target at least 1.5R away?
+7. Have you stated the catalyst status (confirmed / not) out loud, even though it's not a
    required gate -- it changes what you do when the exhaustion signal comes, per Setup A.
 ```
 One "No" = no trade.
@@ -237,10 +289,13 @@ One "No" = no trade.
 a separate journal for Setup A and Setup B:
 ```
 Log per trade: symbol, 1h/30m/15m state, entry, stop, target, volume ratio, catalyst
-  confirmed y/n, conviction grade (Step 4), result in R, MFE, MAE, screenshot.
+  confirmed y/n, conviction grade (Step 4), action_class (TRIM / FULL_EXIT / NO_SHORT_VETO /
+  FAILED_RETEST_SHORT), result in R, MFE, MAE, screenshot.
 Review after 30 logged setups PER SIDE (Setup A and Setup B counted separately).
 Promote a side only if: profit factor > 1.5 AND results stay positive with the single best
   trade removed AND no more than one symbol or one event accounts for the bulk of the result.
+For Setup B specifically, also compare its results against a no-short baseline (Setup A's exit
+  rules alone, with every short skipped) -- promote shorting only if it beats staying flat.
 ```
 Until a side clears that bar, treat every trade under it as a logged research case, not a
 validated edge — exactly the standard any other unproven rule in this trader's process is held
